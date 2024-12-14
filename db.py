@@ -22,9 +22,3 @@ class Database:
             print("Connection failed:", e)
             self.client = None
             self.db = None
-
-    def get_collection(self, collection_name):
-        if self.db:
-            return self.db[collection_name]
-        else:
-            raise Exception("Database connection is not established.")

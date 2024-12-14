@@ -4,9 +4,8 @@ from db import Database
 st.page_link("app.py", label="back", icon="1️⃣")
 
 db = Database()
-profes = db.get_collection("profes")
+profes_collection = db.db["profe"]
 
-# Extract and display all "name" values
-names = [profe['name'] for profe in profes]
+names = [profe['name'] for profe in profes_collection.find()]
 st.write("List of Profes Names:")
 st.write(names)
