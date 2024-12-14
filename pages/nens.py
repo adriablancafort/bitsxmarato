@@ -1,7 +1,7 @@
 import streamlit as st
 from PIL import Image
 from db import Database
-from datetime import datetime, date
+from datetime import datetime
 
 db = Database()
 responses = db.db["responses"]
@@ -12,7 +12,7 @@ st.title("Quins simptomes tens?")
 st.divider()
 
 def insert_selected_simptoms(selected_simptoms):
-    timestamp = datetime.combine(date.today(), datetime.min.time())
+    timestamp = datetime.now()
     
     for simptom in selected_simptoms:
         data_point = {
