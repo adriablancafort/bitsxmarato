@@ -1,0 +1,5 @@
+.dockerignore
+.gitignore
+nginx.config
+README.md
+data/
