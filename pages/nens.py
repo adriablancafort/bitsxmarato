@@ -1,38 +1,43 @@
 import streamlit as st
 from PIL import Image
-import os
 from db import Database
 
 db = Database()
-responses_collection = db.db["responses"]
-print(responses_collection.insert_one({"option": "asdasd"}))
-
+responses = db.db["respostes"]
 
 st.page_link("app.py", label="back", icon="1️⃣")
 
 st.title("Quins simptomes tens?")
 st.divider()
 
-image_dir = os.path.join(os.path.dirname(__file__), "../images/icons")
-images = [f for f in os.listdir(image_dir) if f.endswith('.png')]
+simptoms = [
+    {"name": "Diarrea", "slug": "diarrea"},
+    {"name": "Esgotament", "slug": "esgotament"},
+    {"name": "Mal de cap", "slug": "mal_de_cap"},
+    {"name": "Mal de coll", "slug": "mal_de_coll"},
+    {"name": "Mal de panxa", "slug": "mal_de_panxa"},
+    {"name": "Mocs", "slug": "mocs"},
+    {"name": "Tos", "slug": "tos"},
+    {"name": "Vòmits", "slug": "vomits"},
+    {"name": "Altres", "slug": "altres"},
+]
+selected_simptoms = []
 
-simptomes = []
+for i, simptom in enumerate(simptoms):
+    if i % 4 == 0:
+        cols = st.columns(4)
+    with cols[i % 4]:
+        img = Image.open(f"images/simptoms/{simptom['slug']}.png")
+        img = img.resize((100, 100))
+        st.image(img, caption=simptom['name'])
+        if st.checkbox("", key=f"checkbox_{i}"):
+            selected_simptoms.append(simptom['slug'])
 
-for i, image in enumerate(images):
-  if i % 4 == 0:
-    cols = st.columns(4)
-  with cols[i % 4]:
-    img = Image.open(os.path.join(image_dir, image))
-    img = img.resize((100, 100))
-    caption = os.path.splitext(image)[0].replace('_', ' ')
-    st.image(img, caption=caption)
-    if st.checkbox("", key=f"checkbox_{i}"):
-      simptomes.append(caption)
+submit_button = st.button("Enviar")
 
-submit = st.button("Enviar")
-if submit:
-  if simptomes:
-    print(responses_collection.insert_one({"option": simptomes}))
-    st.success("Enviat!")
-  else:
-    st.error("Selecciona alguna cosa!")
+if submit_button:
+    if selected_simptoms:
+        print(responses.insert_one({"options": selected_simptoms}))
+        st.switch_page("pages/success.py")
+    else:
+        st.error("Selecciona almenys un simptoma")
