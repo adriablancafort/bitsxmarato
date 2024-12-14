@@ -3,7 +3,7 @@ from PIL import Image
 from db import Database
 
 db = Database()
-responses = db.db["respostes"]
+responses = db.db["responses"]
 
 st.page_link("app.py", label="back", icon="1️⃣")
 
