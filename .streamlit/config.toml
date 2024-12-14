@@ -1,2 +1,4 @@
 [client]
 showSidebarNavigation = false
+[browser]
+browser.gatherUsageStats = false
