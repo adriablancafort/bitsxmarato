@@ -5,7 +5,7 @@ from db import Database
 db = Database()
 responses = db.db["responses"]
 
-st.page_link("app.py", label="back", icon="1️⃣")
+st.page_link("app.py", label="Tornar", icon="↩️")
 
 st.title("Quins simptomes tens?")
 st.divider()
