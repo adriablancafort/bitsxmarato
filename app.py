@@ -18,16 +18,12 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-col1, col2, col3 = st.columns(3)
+col1, col2 = st.columns(2)
 
 with col1:
-    if st.button("1️⃣ Metges"):
+    if st.button("👨‍⚕️️ Metges"):
       st.switch_page("pages/metges.py")
 
 with col2:
-    if st.button("2️⃣ Nens"):
+    if st.button("️🧒Alumnes"):
       st.switch_page("pages/nens.py")
-
-with col3:
-    if st.button("2️⃣ Profes"):
-      st.switch_page("pages/profes.py")
