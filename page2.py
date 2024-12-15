@@ -6,19 +6,15 @@ from db import Database
 
 st.set_page_config(layout="wide")
 
-
 @st.cache_data
 def load_data():
-    df = pd.read_csv('qualitat-aire-punts-mesurament-automatic-socrata.csv')
+    db = Database()
+    data = db.db['airquality']
+    cursor = data.find()
+    df = pd.DataFrame(list(cursor))
     df['DATA'] = pd.to_datetime(df['DATA'])
 
-    dfplot = df
-    # dfplot = dfplot[dfplot['CONTAMINANT'] == 'NO2']
-    dfplot['TOTAL'] = sum(dfplot[h] for h in [f'0{i}h' for i in range(1,10)]+[f'{i:2d}h' for i in range(10,25)])
-    dfplot = dfplot[['DATA','TOTAL', 'CONTAMINANT']]
-    dfplot = dfplot.groupby(['DATA', 'CONTAMINANT']).mean().reset_index()
-    dfplot = dfplot[dfplot['DATA'] > '2024-01-01']
-    return dfplot
+    return df
 
 
 
