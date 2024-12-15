@@ -1,4 +1,3 @@
-import pymongo
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
@@ -16,25 +15,13 @@ def load_data():
 
     return df
 
-
-
 dfplot = load_data()
 
 contaminants = dfplot['CONTAMINANT'].unique()
-# contaminant_checkboxes = {contaminant: st.checkbox(contaminant, value=True) for contaminant in contaminants}
-# selected_contaminants = [contaminant for contaminant, selected in contaminant_checkboxes.items() if selected]
-# filtered_df = dfplot[dfplot['CONTAMINANT'].isin(selected_contaminants)]
-# pivot_df = filtered_df.pivot(index='DATA', columns='CONTAMINANT', values='TOTAL')
 
-# st.line_chart(pivot_df)
-
-
-
-# Crear els checkboxes en columnes petites
 # Injectar CSS per personalitzar els checkboxes
 col1, col2 = st.columns([1, 5])  
 
-# Simular dades (exemple per a contaminants)
 contaminants = ['C6H6', 'CO', 'H2S', 'Hg', 'NO', 'NO2', 'NOX', 'O3', 'PM1', 'PM10', 'PM2.5', 'SO2']
 
 # Injectar CSS personalitzat per reduir l'espaiat vertical
@@ -46,6 +33,8 @@ st.markdown("""
         }
     </style>
 """, unsafe_allow_html=True)
+
+
 
 # Crear checkboxes amb menys espai
 with col1:
@@ -60,8 +49,34 @@ with col1:
     pivot_df = filtered_df.pivot(index='DATA', columns='CONTAMINANT', values='TOTAL')
 
 # Mostrar el gràfic
+fig = go.Figure()
+
+for contaminant in pivot_df.columns:
+    fig.add_trace(
+        go.Scatter(
+            x=pivot_df.index,
+            y=pivot_df[contaminant],
+            mode='lines',
+            name=contaminant
+        )
+    )
+
+fig.update_layout(
+    title=dict(
+        text="Contaminant Levels Over Time",
+        y=0.85 # Adjust the y position of the title
+    ),
+    xaxis=dict(title="Date"),
+    yaxis=dict(title="Total"),
+    legend=dict(orientation="h", x=0, y=1),
+)
+
+
+# Mostrar gràfic a Streamlit
+fig.update_layout(height=400)  # Adjust the height as needed
+
 with col2:
-    st.line_chart(pivot_df)
+    st.plotly_chart(fig)
 
 
 
