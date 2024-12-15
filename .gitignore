@@ -1,3 +1,4 @@
 .env
 prova.py
-__pycache__/
+__pycache__/prova.ipynb prova.py prova2.py
+prova.ipynb prova.py prova2.py
