@@ -4,7 +4,6 @@ import plotly.graph_objects as go
 from db import Database
 import random
 
-st.set_page_config(layout="wide")
 
 @st.cache_data
 def load_data():
@@ -81,130 +80,131 @@ def generate_temp_data():
 
     return [dataBCN, dataSQG, dataBDN]
 
-dfplot = load_data()
+def page2():
+    dfplot = load_data()
 
-contaminants = dfplot['CONTAMINANT'].unique()
+    contaminants = dfplot['CONTAMINANT'].unique()
 
-# Injectar CSS per personalitzar els checkboxes
-col1, col2 = st.columns([1, 5])  
+    # Injectar CSS per personalitzar els checkboxes
+    col1, col2 = st.columns([1, 5])  
 
-contaminants = ['C6H6', 'CO', 'H2S', 'Hg', 'NO', 'NO2', 'NOX', 'O3', 'PM1', 'PM10', 'PM2.5', 'SO2']
+    contaminants = ['C6H6', 'CO', 'H2S', 'Hg', 'NO', 'NO2', 'NOX', 'O3', 'PM1', 'PM10', 'PM2.5', 'SO2']
 
-# Injectar CSS personalitzat per reduir l'espaiat vertical
-st.markdown("""
-    <style>
-        /* Reduir l'espai vertical dels checkboxes */
-        .stCheckbox {
-            margin-bottom: -15px;
+    # Injectar CSS personalitzat per reduir l'espaiat vertical
+    st.markdown("""
+        <style>
+            /* Reduir l'espai vertical dels checkboxes */
+            .stCheckbox {
+                margin-bottom: -15px;
+            }
+        </style>
+    """, unsafe_allow_html=True)
+
+    municipis = ['Barcelona', 'Sant Cugat del Vallès', 'Badalona']
+
+    # Crear checkboxes amb menys espai
+    with col1:
+        municipi = st.selectbox("Municipi", municipis)
+        st.write("Select Contaminants")
+
+        contaminant_checkboxes = {
+            contaminant: st.checkbox(contaminant, value=(contaminant in ['NO2', 'PM10', 'PM1', 'PM2.5']), key=contaminant) for contaminant in contaminants
         }
-    </style>
-""", unsafe_allow_html=True)
 
-municipis = ['Barcelona', 'Sant Cugat del Vallès', 'Badalona']
+        # Mostrar els contaminants seleccionats
+        selected_contaminants = [k for k, v in contaminant_checkboxes.items() if v]
 
-# Crear checkboxes amb menys espai
-with col1:
-    municipi = st.selectbox("Municipi", municipis)
-    st.write("Select Contaminants")
+        filtered_df = dfplot[dfplot['CONTAMINANT'].isin(selected_contaminants)]
+        filtered_df = filtered_df[filtered_df['MUNICIPI'] == municipi]
+        pivot_df = filtered_df.pivot(index='DATA', columns='CONTAMINANT', values='TOTAL')
 
-    contaminant_checkboxes = {
-        contaminant: st.checkbox(contaminant, value=(contaminant in ['NO2', 'PM10', 'PM1', 'PM2.5']), key=contaminant) for contaminant in contaminants
-    }
+    # Mostrar el gràfic
+    fig = go.Figure()
 
-    # Mostrar els contaminants seleccionats
-    selected_contaminants = [k for k, v in contaminant_checkboxes.items() if v]
+    for contaminant in pivot_df.columns:
+        fig.add_trace(
+            go.Scatter(
+                x=pivot_df.index,
+                y=pivot_df[contaminant],
+                mode='lines',
+                name=contaminant
+            )
+        )
 
-    filtered_df = dfplot[dfplot['CONTAMINANT'].isin(selected_contaminants)]
-    filtered_df = filtered_df[filtered_df['MUNICIPI'] == municipi]
-    pivot_df = filtered_df.pivot(index='DATA', columns='CONTAMINANT', values='TOTAL')
+    fig.update_layout(
+        title=dict(
+            text="Contaminant Levels Over Time",
+            y=0.85 # Adjust the y position of the title
+        ),
+        xaxis=dict(title="Date"),
+        yaxis=dict(title="Total"),
+        legend=dict(orientation="h", x=0, y=1),
+    )
 
-# Mostrar el gràfic
-fig = go.Figure()
 
-for contaminant in pivot_df.columns:
+    # Mostrar gràfic a Streamlit
+    fig.update_layout(height=400)  # Adjust the height as needed
+
+    with col2:
+        st.plotly_chart(fig)
+
+
+
+    temp_data = generate_temp_data()
+
+
+    if municipi == 'Barcelona':
+        df = pd.DataFrame(temp_data[0])
+    elif municipi == 'Sant Cugat del Vallès':
+        df = pd.DataFrame(temp_data[1])
+    else:
+        df = pd.DataFrame(temp_data[2])
+
+    # Configurar gràfic Plotly
+    fig = go.Figure()
+
+    # Afegir la primera línia (mean_temperature)
     fig.add_trace(
         go.Scatter(
-            x=pivot_df.index,
-            y=pivot_df[contaminant],
-            mode='lines',
-            name=contaminant
+            x=df["Date"], 
+            y=df["mean_temperature"], 
+            mode='lines+markers',
+            name='Mean Temperature (°C)',
+            yaxis='y1'
         )
     )
 
-fig.update_layout(
-    title=dict(
-        text="Contaminant Levels Over Time",
-        y=0.85 # Adjust the y position of the title
-    ),
-    xaxis=dict(title="Date"),
-    yaxis=dict(title="Total"),
-    legend=dict(orientation="h", x=0, y=1),
-)
-
-
-# Mostrar gràfic a Streamlit
-fig.update_layout(height=400)  # Adjust the height as needed
-
-with col2:
-    st.plotly_chart(fig)
-
-
-
-temp_data = generate_temp_data()
-
-
-if municipi == 'Barcelona':
-    df = pd.DataFrame(temp_data[0])
-elif municipi == 'Sant Cugat del Vallès':
-    df = pd.DataFrame(temp_data[1])
-else:
-    df = pd.DataFrame(temp_data[2])
-
-# Configurar gràfic Plotly
-fig = go.Figure()
-
-# Afegir la primera línia (mean_temperature)
-fig.add_trace(
-    go.Scatter(
-        x=df["Date"], 
-        y=df["mean_temperature"], 
-        mode='lines+markers',
-        name='Mean Temperature (°C)',
-        yaxis='y1'
+    # Afegir la segona línia (mean_relative_humidity)
+    fig.add_trace(
+        go.Scatter(
+            x=df["Date"], 
+            y=df["mean_relative_humidity"], 
+            mode='lines+markers',
+            name='Mean Relative Humidity (%)',
+            yaxis='y2'
+        )
     )
-)
 
-# Afegir la segona línia (mean_relative_humidity)
-fig.add_trace(
-    go.Scatter(
-        x=df["Date"], 
-        y=df["mean_relative_humidity"], 
-        mode='lines+markers',
-        name='Mean Relative Humidity (%)',
-        yaxis='y2'
+    # Configurar eixos Y dobles
+    fig.update_layout(
+        title="Mean Temperature and Relative Humidity",
+        xaxis=dict(title="Date"),
+        yaxis=dict(
+            title="Mean Temperature (°C)",
+            side="left",
+            showgrid=False
+        ),
+        yaxis2=dict(
+            title="Mean Relative Humidity (%)",
+            overlaying="y",
+            side="right",
+            showgrid=False
+        ),
+        legend=dict(x=0, y=1.39),
     )
-)
-
-# Configurar eixos Y dobles
-fig.update_layout(
-    title="Mean Temperature and Relative Humidity",
-    xaxis=dict(title="Date"),
-    yaxis=dict(
-        title="Mean Temperature (°C)",
-        side="left",
-        showgrid=False
-    ),
-    yaxis2=dict(
-        title="Mean Relative Humidity (%)",
-        overlaying="y",
-        side="right",
-        showgrid=False
-    ),
-    legend=dict(x=0, y=1.39),
-)
 
 
-# Mostrar gràfic a Streamlit
-fig.update_layout(height=300)  # Adjust the height as needed
-with col2:
-    st.plotly_chart(fig)
+    # Mostrar gràfic a Streamlit
+    fig.update_layout(height=300)  # Adjust the height as needed
+    with col2:
+        st.plotly_chart(fig)

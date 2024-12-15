@@ -2,17 +2,33 @@ import streamlit as st
 from db import Database
 import pandas as pd
 from datetime import datetime, date
+from pages.page1 import page1
+from pages.page2 import page2
+from pages.page3 import page3
+from pages.page4 import page4
 import altair as alt
 
-st.set_page_config(
-    page_title="Metges",
-    page_icon="👨‍⚕️",
-    layout="wide"
-)
-st.page_link("app.py", label="Tornar", icon="↩️")
-
-st.title("🤒 Simptomes registrats")
+st.title("🤒Simptomes registrats")
 st.divider()
+
+db = Database()
+responses = db.db["responses"]
+
+with st.sidebar:
+    st.header("Navigation")
+    page = st.radio("Ves a", ["Pàgina 1", "Pàgina 2", "Pàgina 3", "Pàgina 4", "Enrere ↩️"], key="navigation")
+
+if page == "Pàgina 1":
+
+    page1()
+elif page == "Pàgina 2":
+    page2()
+elif page == "Pàgina 3":
+    page3()
+elif page == "Pàgina 4":
+    page4()
+elif page == "Enrere ↩️":
+    st.switch_page("app.py")
 
 # Connect to the database
 db = Database()

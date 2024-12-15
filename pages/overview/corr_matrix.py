@@ -3,12 +3,14 @@ from db import Database
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
 
 symptoms = ["mal_de_panxa","calfreds","mal_de_cap","mal_de_coll","mocs","nas_tapat","esternut","vomits","altres","tos"]
 diseases = ['Impetigen', 'Escarlatina', 'Faringoamigdalitis', 'Faringoamigdalitis estreptocòccica', 'Grip', 'Pneumònia', 'Altres IRA', 'Bronquiolitis','COVID-19']
 
 
-def corr_matrix():
+@st.cache_data
+def compute_correlation_matrix():
     db = Database()
     responses = db.db['responses']
     cursor = responses.find()
@@ -20,22 +22,19 @@ def corr_matrix():
 
     df = pd.DataFrame(list(cursor))
 
-    schools = pd.read_csv('../../data/datasets/dades_correlation.csv')
+    schools = pd.read_csv('data/datasets/dades_correlation.csv')
     schools.drop(columns=['ciutat'], axis=1, inplace=True)
     schools.set_index('regio_sanitaria', inplace=True)
 
 
-    sivic = pd.read_csv('../../data/datasets/SIVIC_grouped.csv')
+    sivic = pd.read_csv('data/datasets/SIVIC_grouped.csv')
     sivic = sivic.drop(columns=['data'], axis=1)
     sivic = sivic.groupby(['regio_sanitaria', 'diagnostic']).sum()
     sivic = sivic.reset_index()
     sivic = sivic.pivot(index='regio_sanitaria', columns='diagnostic', values= 'casos')
 
-    print(sivic.index)   # Verifica los índices de sivic
-    print(schools.index) 
 
     schools_sivic = pd.merge(schools, sivic, on='regio_sanitaria', how='inner')
-    print('len', len(schools_sivic))
 
     columns_to_convert = [col for col in schools_sivic.columns if col != 'regio_sanitaria']
     schools_sivic[columns_to_convert] = schools_sivic[columns_to_convert].apply(pd.to_numeric, errors='coerce')
@@ -54,13 +53,8 @@ def corr_matrix():
 
     return fig
 
-    
-    
 
-
-    # per cada regió sanitària
-    # cada símptoma i cada m
-
-    print()
+def corr_matrix():
+    return compute_correlation_matrix()
 
     

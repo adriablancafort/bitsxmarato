@@ -5,7 +5,7 @@ import seaborn as sns
 import plotly.express as px
 
 def plot_simptomes():
-    schools = pd.read_csv('../../data/datasets/dades.csv', sep=';', encoding='latin1')
+    schools = pd.read_csv('data/datasets/dades.csv', sep=';', encoding='latin1')
     
     schools['timestamp'] = pd.to_datetime(schools['timestamp'], format='%d/%m/%Y')
     
@@ -23,7 +23,7 @@ def plot_simptomes():
 
 
 def plot_be_regular_malament():
-    schools = pd.read_csv('../../data/datasets/dades.csv', sep=';', encoding='latin1')
+    schools = pd.read_csv('data/datasets/dades.csv', sep=';', encoding='latin1')
     
     schools['timestamp'] = pd.to_datetime(schools['timestamp'], format='%d/%m/%Y')
     
