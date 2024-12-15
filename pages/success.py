@@ -5,5 +5,5 @@ st.set_page_config(
     page_icon="‍✅",
 )
 
-st.page_link("pages/nens.py", label="Tornar a enviar",icon="↩️")
+st.page_link("pages/alumnes-enquesta.py", label="Tornar a enviar",icon="↩️")
 st.success("Resposta registrada!")
