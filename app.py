@@ -35,8 +35,8 @@ st.divider()
 col1, col2 = st.columns(2)
 with col1:
     if st.button("👨‍⚕️️ Metges"):
-      st.switch_page("pages/metges.py")
+      st.switch_page("pages/metges-crea-compte.py")
 
 with col2:
     if st.button("️🧒 Alumnes"):
-      st.switch_page("pages/nens.py")
+      st.switch_page("pages/alumnes-inicia-sessio.py")
