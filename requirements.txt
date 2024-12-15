@@ -3,3 +3,4 @@ pymongo
 python-dotenv
 pandas
 altair
+matplotlib
