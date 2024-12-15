@@ -1,5 +1,3 @@
-
-
 import pandas as pd
 import plotly.express as px
 from statsmodels.tsa.seasonal import seasonal_decompose
@@ -7,8 +5,8 @@ import matplotlib.pyplot as plt
 import streamlit as st
 from db import Database
 
-
-def decomposition_plot():
+@st.cache_data
+def decomposition_plot(region):
     db = Database()
     sivic = db.db['sivic']
     cursor = sivic.find()
