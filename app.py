@@ -1,6 +1,11 @@
 import streamlit as st
 
 
+st.set_page_config(
+    page_title="La lluita continua",
+    page_icon="🦠",
+)
+
 st.markdown("""
     <style>
     p{

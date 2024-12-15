@@ -3,6 +3,11 @@ from PIL import Image
 from db import Database
 from datetime import datetime
 
+st.set_page_config(
+    page_title="Alumnes",
+    page_icon="‍🧒",
+)
+
 db = Database()
 responses = db.db["responses"]
 
@@ -12,15 +17,21 @@ st.title("Quins simptomes tens?")
 st.divider()
 
 def insert_selected_simptoms(selected_simptoms):
-    timestamp = datetime.now()
-    
+    timestamp = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
     for simptom in selected_simptoms:
-        data_point = {
-            "timestamp": timestamp,
-            "count": 1,
-            "simptom": simptom
-        }
-        responses.insert_one(data_point)
+        existing_document = responses.find_one({"timestamp": timestamp, "simptom": simptom})
+        if existing_document:
+            responses.update_one({"timestamp" : timestamp, "simptom":simptom}, {"$inc": {"count": 1}})
+        else:
+            new_datapoint= {
+                "timestamp": timestamp,
+                "simptom": simptom,
+                "count": 1
+            }
+            responses.insert_one(new_datapoint)
+
+
+        
 
 simptoms = [
     {"name": "Diarrea", "slug": "diarrea"},
@@ -53,3 +64,4 @@ if submit_button:
         st.switch_page("pages/success.py")
     else:
         st.error("Selecciona almenys un simptoma")
+

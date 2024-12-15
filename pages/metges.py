@@ -3,6 +3,11 @@ from db import Database
 import pandas as pd
 from datetime import datetime, date
 
+
+st.set_page_config(
+    page_title="Metges",
+    page_icon="👨‍⚕️",
+)
 st.page_link("app.py", label="Tornar", icon="↩️")
 
 db = Database()
