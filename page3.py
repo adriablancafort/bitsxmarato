@@ -8,7 +8,7 @@ st.markdown("""
     <style>
         /* Reduir l'espai vertical dels checkboxes */
         .stCheckbox {
-            margin-bottom: -10px;
+            margin-bottom: -15px;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -71,7 +71,7 @@ regions = [
 
 
 with col1:
-    region = st.selectbox("Select Region", regions)
+    region = st.selectbox("Regió Sanitària", regions)
     disease_checkboxes = {
         disease: st.checkbox(disease, value=(disease in ['COVID-19']),
                                 key=f"{disease}_{i}") for i, disease in enumerate(malalties)
