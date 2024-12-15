@@ -16,16 +16,16 @@ responses = db.db["responses"]
 
 with st.sidebar:
     st.header("Navigation")
-    page = st.radio("Ves a", ["Pàgina 1", "Pàgina 2", "Pàgina 3", "Pàgina 4", "Enrere ↩️"], key="navigation")
+    page = st.radio("Ves a", ["General", "Entorn", "Regions sanitàries", "Mapa", "Enrere ↩️"], key="navigation")
 
-if page == "Pàgina 1":
+if page == "General":
 
     page1()
-elif page == "Pàgina 2":
+elif page == "Entorn":
     page2()
-elif page == "Pàgina 3":
+elif page == "Regions sanitàries":
     page3()
-elif page == "Pàgina 4":
+elif page == "Mapa":
     page4()
 elif page == "Enrere ↩️":
     st.switch_page("app.py")
