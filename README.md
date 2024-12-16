@@ -38,11 +38,11 @@ We store all the responses among other data in a self hosted MongoDB database:
 
 <img width="1288" alt="Mongo DB" src="https://github.com/user-attachments/assets/2ddb3a29-49bb-476a-8eb5-6d6b9f70f15a" />
 
-Doctors can also Register and Login to view various Graphs and Insights obtained in real time from the data collected through the application as well as other souces:
+Doctors can also Register and Login to view various graphs and insights obtained in real time from the data collected through the application as well as other souces:
 
 <img width="953" alt="Register Metge" src="https://github.com/user-attachments/assets/ee4782cc-7f8c-48ba-b873-14081dd21678" />
 
-General Overview Line Chart of the evolution of all Registered Symptoms:
+General overview line chart of the evolution of all registered symptoms:
 
 <img width="1402" alt="General" src="https://github.com/user-attachments/assets/59e3e97e-cc82-483c-92f4-a70a340ed452" />
 
@@ -72,7 +72,7 @@ We combined powerful backend and frontend technologies to create a robust, yet i
 
 - **Streamlit Dashboard:** The frontend was built using Streamlit, offering an intuitive interface to view plots, trends, and key metrics. The dashboard makes health data accessible and actionable, without the need for technical expertise.
 
-- **Docker Deployment:** We Leveraged Docker to Containerize and seamlessly deploy both our application and database to our own Cloud Server. Thanks to a custom automatic Deployment Pipeline powered by Webhooks triggered by GitHub on every commit in the main branch, we were able to significantly reduce our CI/CD times, enabling our team to iterate faster and with more agility while investing more resources on developing the core functionality of the application.
+- **Docker Deployment:** We leveraged Docker to containerize and seamlessly deploy both our application and database to our own cloud server. Thanks to a custom automatic deployment pipeline powered by webhooks triggered by GitHub on every commit in the main branch, we were able to significantly reduce our CI/CD times, enabling our team to iterate faster while investing more resources on developing the core functionality of the application.
 
 ## What's next
 
